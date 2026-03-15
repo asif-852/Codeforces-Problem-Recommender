@@ -22,7 +22,7 @@ A Django web application that recommends [Codeforces](https://codeforces.com/) c
 ## Tech Stack
 
 - **Backend:** Python, Django 5.0, Django REST Framework
-- **Frontend:** HTML, CSS, JavaScript (single-page template)
+- **Frontend:** React 19, Vite 8 (single-page application)
 - **External API:** [Codeforces API](https://codeforces.com/apiHelp)
 - **Database:** SQLite (default, currently unused)
 
@@ -32,6 +32,8 @@ A Django web application that recommends [Codeforces](https://codeforces.com/) c
 
 - Python 3.10+
 - pip
+- Node.js 18+
+- npm
 
 ### Installation
 
@@ -39,7 +41,11 @@ A Django web application that recommends [Codeforces](https://codeforces.com/) c
 # Clone the repository
 git clone https://github.com/asif-852/Codeforces-Problem-Recommender.git
 cd Codeforces-Problem-Recommender
+```
 
+**Backend setup:**
+
+```bash
 # Create a virtual environment
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
@@ -51,21 +57,33 @@ pip install -r requirements.txt
 cd cf_recommender
 python manage.py migrate
 
-# Start the development server
+# Start the backend server (runs on http://127.0.0.1:8000)
 python manage.py runserver
+```
+
+**Frontend setup** (in a separate terminal, from the project root):
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the development server (runs on http://localhost:3000)
+npm run dev
 ```
 
 ### Usage
 
-1. Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser.
-2. Enter your Codeforces handle (e.g., `tourist`).
-3. Click **Get Recommendations** to receive 6 personalized problems.
+1. Make sure both the backend and frontend development servers are running.
+2. Open [http://localhost:3000/](http://localhost:3000/) in your browser.
+3. Enter your Codeforces handle (e.g., `tourist`).
+4. Click **Get Recommendations** to receive 6 personalized problems.
 
 ## API Endpoints
 
 | Method | Endpoint                      | Description                                    |
 |--------|-------------------------------|------------------------------------------------|
-| GET    | `/`                           | Home page (HTML UI)                            |
 | GET    | `/api/user/<handle>/`         | Returns Codeforces user profile info           |
 | GET    | `/api/recommend/<handle>/`    | Returns recommended problems + topics          |
 
@@ -106,11 +124,26 @@ Codeforces-Problem-Recommender/
 │   │   ├── wsgi.py
 │   │   └── asgi.py
 │   └── codeforces_recommender/       # Main application
-│       ├── views.py                  # API views & recommendation logic
+│       ├── views.py                  # API views
 │       ├── urls.py                   # URL routing
-│       └── templates/
-│           └── codeforces_recommender/
-│               └── home.html         # Frontend UI
+│       ├── constants.py              # Skill groups & topic mappings
+│       └── services/
+│           ├── codeforces_api.py     # Codeforces API client
+│           └── recommender.py        # Recommendation algorithm
+├── frontend/                         # React + Vite SPA
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── index.html
+│   └── src/
+│       ├── App.jsx                   # Root component & state management
+│       ├── api.js                    # API client
+│       └── components/
+│           ├── SearchBar.jsx
+│           ├── ProblemList.jsx
+│           ├── UserInfo.jsx
+│           ├── TopicsList.jsx
+│           ├── ErrorMessage.jsx
+│           └── Spinner.jsx
 ├── requirements.txt
 ├── README.md
 └── .gitignore

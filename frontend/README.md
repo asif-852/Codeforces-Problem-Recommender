@@ -1,16 +1,47 @@
-# React + Vite
+# Codeforces Problem Recommender — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React + Vite frontend for the Codeforces Problem Recommender. It communicates with the Django REST backend to display personalized problem recommendations.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** — UI library
+- **Vite 8** — Build tool and development server (with HMR)
+- **ESLint** — Code linting
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js 18+
+- npm
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Setup
+
+```bash
+# From the frontend/ directory
+npm install
+npm run dev
+```
+
+The dev server starts on **http://localhost:3000** and proxies all `/api/*` requests to the Django backend at `http://127.0.0.1:8000`.
+
+### Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server with HMR |
+| `npm run build` | Build for production (outputs to `dist/`) |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint |
+
+## Components
+
+| Component | Description |
+|-----------|-------------|
+| `App.jsx` | Root component; manages global state and orchestrates API calls |
+| `SearchBar.jsx` | Handles input with client-side validation |
+| `UserInfo.jsx` | Displays user profile (handle, rating, rank, skill group) |
+| `ProblemList.jsx` | Renders the list of 6 recommended problems with links |
+| `TopicsList.jsx` | Shows important topics for the user's skill group |
+| `ErrorMessage.jsx` | Displays API or validation errors |
+| `Spinner.jsx` | Loading indicator shown during API requests |
