@@ -29,7 +29,7 @@ media/
 .DS_Store
 Thumbs.db
 
-project_overview_and_improvements.md.resolved
+project_overview_and_improvements.md
 
 # Deployment notes (personal)
 Some links used in the deployment of cf recommender app.txt
