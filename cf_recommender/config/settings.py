@@ -83,6 +83,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
+# Cache
+# https://docs.djangoproject.com/en/5.0/topics/cache/
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'codeforces-recommender',
+    }
+}
+
+# Cache TTL for the Codeforces problem set (in seconds).
+# The problem set changes infrequently (new contests ~weekly), so 30 minutes is safe.
+PROBLEMSET_CACHE_TTL = 60 * 30  # 30 minutes
+
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 

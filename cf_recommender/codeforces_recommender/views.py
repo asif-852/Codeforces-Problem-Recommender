@@ -1,14 +1,18 @@
+import logging
 import re
 
 from rest_framework.decorators import api_view
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from .constants import GROUP_TOPICS, HANDLE_MAX_LENGTH, HANDLE_PATTERN, get_user_group
 from .services.codeforces_api import get_user_info, get_user_submissions, analyze_submissions
 from .services.recommender import recommend_problems
 
+logger = logging.getLogger(__name__)
 
-def validate_handle(handle):
+
+def validate_handle(handle: str) -> str | None:
     """Validate a Codeforces handle.
 
     Returns None if valid, or an error message string if invalid.
@@ -23,9 +27,10 @@ def validate_handle(handle):
 
 
 @api_view(['GET'])
-def user_info_view(request, handle):
+def user_info_view(request: Request, handle: str) -> Response:
     error = validate_handle(handle)
     if error:
+        logger.warning("Validation failed for handle=%r: %s", handle, error)
         return Response({'error': error}, status=400)
 
     user_data = get_user_info(handle)
@@ -35,9 +40,10 @@ def user_info_view(request, handle):
 
 
 @api_view(['GET'])
-def recommend_problems_view(request, handle):
+def recommend_problems_view(request: Request, handle: str) -> Response:
     error = validate_handle(handle)
     if error:
+        logger.warning("Validation failed for handle=%r: %s", handle, error)
         return Response({'error': error}, status=400)
 
     user_data = get_user_info(handle)

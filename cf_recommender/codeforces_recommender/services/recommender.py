@@ -1,10 +1,20 @@
+import logging
 import random
+from collections import Counter
+from typing import Any
 
 from ..constants import GROUP_TOPICS, GROUP_RATINGS
 from .codeforces_api import get_problems
 
+logger = logging.getLogger(__name__)
 
-def recommend_problems(group, solved_problems, failed_topics, submission_count):
+
+def recommend_problems(
+    group: str,
+    solved_problems: set[tuple[int, str]],
+    failed_topics: Counter[str],
+    submission_count: int,
+) -> list[dict[str, Any]]:
     """Build a list of 6 recommended problems for the user.
 
     Args:
@@ -16,6 +26,11 @@ def recommend_problems(group, solved_problems, failed_topics, submission_count):
     Returns:
         List of up to 6 problem dicts.
     """
+    logger.info(
+        "Generating recommendations: group=%s, solved=%d, submissions=%d",
+        group, len(solved_problems), submission_count,
+    )
+
     problems = get_problems()
     group_topics = set(GROUP_TOPICS[group])
 
@@ -26,8 +41,10 @@ def recommend_problems(group, solved_problems, failed_topics, submission_count):
             if topic not in group_topics
         ]
         group_topics.update(struggle_topics[:3])
+        if struggle_topics:
+            logger.info("Added struggle topics: %s", struggle_topics[:3])
 
-    recommended = []
+    recommended: list[dict[str, Any]] = []
     for rating, count in GROUP_RATINGS[group]:
         eligible_problems = [
             p for p in problems
@@ -45,6 +62,10 @@ def recommend_problems(group, solved_problems, failed_topics, submission_count):
     if len(recommended) > 6:
         recommended = random.sample(recommended, 6)
     elif len(recommended) < 6:
+        logger.warning(
+            "Only found %d problems in primary pass, searching for additional",
+            len(recommended),
+        )
         additional_problems = [
             p for p in problems
             if p.get('rating') in [r for r, _ in GROUP_RATINGS[group]]
@@ -58,4 +79,6 @@ def recommend_problems(group, solved_problems, failed_topics, submission_count):
             random.sample(candidates, min(6 - len(recommended), len(candidates)))
         )
 
-    return recommended[:6]
+    result = recommended[:6]
+    logger.info("Returning %d recommended problems", len(result))
+    return result
