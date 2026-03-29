@@ -5,6 +5,7 @@ import ProblemList from "./components/ProblemList";
 import TopicsList from "./components/TopicsList";
 import Spinner from "./components/Spinner";
 import ErrorMessage from "./components/ErrorMessage";
+import InfoBanner from "./components/InfoBanner";
 import { fetchRecommendations } from "./api";
 import "./App.css";
 
@@ -30,6 +31,13 @@ function App() {
     }
   }, []);
 
+  // Re-fetch with the same handle to get a new set of problems (#22)
+  const handleRefresh = useCallback(() => {
+    if (lastHandle) {
+      handleSearch(lastHandle);
+    }
+  }, [lastHandle, handleSearch]);
+
   const handleRetry = useCallback(() => {
     if (lastHandle) {
       handleSearch(lastHandle);
@@ -37,29 +45,51 @@ function App() {
   }, [lastHandle, handleSearch]);
 
   return (
-    <div className="container">
-      <h1>Codeforces Problem Recommender</h1>
-      <SearchBar onSearch={handleSearch} loading={loading} />
+    <div className="app-wrapper">
+      <div className="container">
+        {/* Header */}
+        <header className="header-card">
+          <h1>
+            <span className="logo-icon">&lt;/&gt;</span>
+            Codeforces Problem Recommender
+          </h1>
+          <p>Get personalized problem recommendations based on your Codeforces profile</p>
+        </header>
 
-      <div id="result">
-        {loading && <Spinner />}
+        {/* Info banner — always visible */}
+        <InfoBanner />
 
-        {error && <ErrorMessage message={error} onRetry={handleRetry} />}
+        {/* Search */}
+        <div className="search-card">
+          <SearchBar onSearch={handleSearch} loading={loading} />
+        </div>
 
-        {data && (
-          <>
-            <UserInfo userInfo={data.user_info} />
-            <ProblemList problems={data.recommended_problems} />
-            <TopicsList
-              title="Important Topics"
-              topics={data.important_topics}
-            />
-            <TopicsList
-              title="Topics to Focus On"
-              topics={data.struggle_topics}
-            />
-          </>
-        )}
+        {/* Results area */}
+        <div id="result">
+          {loading && <Spinner />}
+
+          {error && <ErrorMessage message={error} onRetry={handleRetry} />}
+
+          {data && (
+            <>
+              <UserInfo userInfo={data.user_info} />
+              <ProblemList
+                problems={data.recommended_problems}
+                onRefresh={handleRefresh}
+              />
+              <TopicsList
+                title="Important Topics"
+                topics={data.important_topics}
+              />
+              {data.struggle_topics && data.struggle_topics.length > 0 && (
+                <TopicsList
+                  title="Topics to Focus On"
+                  topics={data.struggle_topics}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

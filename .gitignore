@@ -31,5 +31,15 @@ Thumbs.db
 
 project_overview_and_improvements.md
 
+Demo.jpg
+
 # Deployment notes (personal)
 Some links used in the deployment of cf recommender app.txt
+
+# Node
+node_modules/
+
+# Package lock files
+package-lock.json
+package.json
+

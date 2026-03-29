@@ -1,18 +1,41 @@
 function UserInfo({ userInfo }) {
   if (!userInfo) return null;
 
+  const rating = userInfo.rating;
+  const rank   = userInfo.rank;
+
   return (
-    <div className="user-info">
-      <h2>User Info</h2>
-      <p>
-        <strong>Handle:</strong> {userInfo.handle}
-      </p>
-      <p>
-        <strong>Rating:</strong> {userInfo.rating ?? "Unrated"}
-      </p>
-      <p>
-        <strong>Rank:</strong> {userInfo.rank ?? "Unranked"}
-      </p>
+    <div className="card">
+      <h2 className="section-heading">User Info</h2>
+
+      <div className="user-stats-grid">
+        <div className="stat-cell">
+          <span className="stat-label">Handle</span>
+          <span className="stat-value">{userInfo.handle}</span>
+        </div>
+
+        <div className="stat-cell">
+          <span className="stat-label">Rating</span>
+          <span
+            className={`stat-value ${
+              rating ? "stat-value--rating" : "stat-value--unrated"
+            }`}
+          >
+            {rating ?? "Unrated"}
+          </span>
+        </div>
+
+        <div className="stat-cell">
+          <span className="stat-label">Rank</span>
+          <span
+            className={`stat-value ${
+              rank ? "stat-value--rank" : "stat-value--unrated"
+            }`}
+          >
+            {rank ?? "Unranked"}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
