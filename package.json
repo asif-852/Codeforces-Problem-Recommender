@@ -1,0 +1,14 @@
+{
+  "name": "codeforces-recommender-root",
+  "version": "1.0.0",
+  "description": "Root package to run both servers",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd cf_recommender && python -u manage.py runserver",
+    "kill": "npx kill-port 3000 8000"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

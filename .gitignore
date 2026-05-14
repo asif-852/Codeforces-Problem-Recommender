@@ -32,6 +32,7 @@ Thumbs.db
 project_overview_and_improvements.md
 
 session-ses_310b.md
+session-ses_2b6e.md
 
 Demo.jpg
 
@@ -41,7 +42,6 @@ Some links used in the deployment of cf recommender app.txt
 # Node
 node_modules/
 
-# Package lock files
-package-lock.json
-package.json
+# Production environment (contains secrets)
+.env.production
 
